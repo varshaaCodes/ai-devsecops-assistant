@@ -162,7 +162,15 @@ def analyze_pr_and_make_pdf(platform: str, repo_or_project: str, number: int, po
     # provider or the SDK: present a concise, actionable message to the UI.
     try:
         low_ai = (ai_review or "").lower()
-        if "invalid_api_key" in low_ai or "incorrect api key" in low_ai or "unauthorized" in low_ai or "invalid request error" in low_ai:
+        # Broad pattern check to catch different SDK/provider message shapes
+        if (
+            "invalid_api_key" in low_ai
+            or "invalid api key" in low_ai
+            or "incorrect api key" in low_ai
+            or ("invalid" in low_ai and "api" in low_ai)
+            or "unauthorized" in low_ai
+            or "invalid request error" in low_ai
+        ):
             ai_review = (
                 "⚠️ OpenAI API error: Invalid or unauthorized API key. "
                 "Please rotate your OpenAI API key at https://platform.openai.com/account/api-keys and set the new value in OPENAI_API_KEY, "
