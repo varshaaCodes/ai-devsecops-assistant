@@ -158,6 +158,19 @@ def analyze_pr_and_make_pdf(platform: str, repo_or_project: str, number: int, po
 
     # Run AI analysis (this function already returns friendly messages on error)
     ai_review = analyze_code_diff(diff_text)
+    # Normalize common API-key failure messages that may come from the
+    # provider or the SDK: present a concise, actionable message to the UI.
+    try:
+        low_ai = (ai_review or "").lower()
+        if "invalid_api_key" in low_ai or "incorrect api key" in low_ai or "unauthorized" in low_ai or "invalid request error" in low_ai:
+            ai_review = (
+                "⚠️ OpenAI API error: Invalid or unauthorized API key. "
+                "Please rotate your OpenAI API key at https://platform.openai.com/account/api-keys and set the new value in OPENAI_API_KEY, "
+                "then restart the backend. (Do NOT paste keys into logs or public channels.)"
+            )
+    except Exception:
+        # best-effort: leave ai_review as-is if normalization fails
+        pass
     severity_counts = _simple_severity_counts_from_ai(ai_review)
 
     # Save PDF (best-effort). If PDF generation fails, record the error but do
