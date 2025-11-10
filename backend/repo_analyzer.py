@@ -61,6 +61,10 @@ Provide a short summary and grouped bullet points.
 Diff (truncated):
 {diff_text[:12000]}
 """
+    # Force the model to reply in English so UI and downstream tooling remain
+    # consistent regardless of repository/native language. If the diff contains
+    # non-English content, summarize it in English.
+    prompt = "Respond in English only. If the diff contains non-English text, provide the summary and suggestions in English.\n\n" + prompt
     try:
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
