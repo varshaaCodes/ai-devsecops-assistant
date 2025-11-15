@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+requests
+bandit
+semgrep
+openai
+fpdf2==2.7.9
+GitPython
+openai
+gitpython
+fpdf
+requests
+openai
+gitpython
+
