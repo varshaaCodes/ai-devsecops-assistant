@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: devsecops-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITLAB_TOKEN=${GITLAB_TOKEN}
+      - HISTORY_DB=/app/reports/analysis_history.db
+    volumes:
+      - ./reports:/app/reports
+    networks:
+      - devsecops-net
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: devsecops-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - BASE_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./reports:/app/reports
+    networks:
+      - devsecops-net
+
+networks:
+  devsecops-net:
+    driver: bridge

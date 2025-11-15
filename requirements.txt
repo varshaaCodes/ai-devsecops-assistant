@@ -1,0 +1,10 @@
+fastapi==0.110.0
+uvicorn==0.27.1
+sqlalchemy==2.0.29
+bandit==1.7.9
+semgrep==1.61.0
+streamlit==1.32.0
+pandas==2.2.1
+openai==1.3.5
+requests
+fpdf2==2.7.9

@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+# Set working dir to /app so the repository root can be copied into /app
+WORKDIR /app
+
+# Copy the backend package directory into the image preserving package name
+COPY ./backend /app/backend
+
+# Install dependencies (requirements.txt is inside backend/)
+WORKDIR /app/backend
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends git \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& pip install --upgrade pip \
+	&& pip install --no-cache-dir -r requirements.txt
+
+# Ensure /app is the working directory at runtime so Python can import the `backend` package
+WORKDIR /app
+
+# Expose port and run uvicorn pointing at the package module
+EXPOSE 8000
+CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000"]
