@@ -34,4 +34,10 @@ It runs automatically on **Pull Requests (PRs)**, providing inline review commen
 
 ---
 
-## 📂 Repository Structure  
+## � Screenshots
+
+![Dashboard Screenshot](./images/ss-devops.png)
+
+---
+
+## �📂 Repository Structure  
